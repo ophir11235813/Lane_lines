@@ -25,9 +25,7 @@ Introduction to method: We'll first show how to do this for a single image. The 
 
 STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
 
-![Alt text](/relative/path/to/grayscale.jpg?raw=true "Optional Title")
-
-
+![Alt text](/relative/grayscale.jpg?raw=true "Optional Title")
 
 STEP 2: Apply Gaussian smoothing to the gray scale image. This applies a Gaussian blur over a filter, thus reducing noise and unneccessary detail in the image. 
 
