@@ -31,6 +31,8 @@ STEP 2: Apply Gaussian smoothing to the gray scale image. This applies a Gaussia
 
 STEP 3: Run a Canny Edge Detection algorithm over the smoothed image. This algorithm looks for steep changes (i.e. high value derivatives) in color functions, thus highlighting where the edges of objects are. 
 
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/canny_edge.jpg)
+
 STEP 4: Define a "region of interest". We are interested only in the region in front (and a little to the sides) of the car, rather than in the entire image. Hence define a trapezoid within which we subsequently detect the lanes. Note that this trapezoid can be thought of as a 2D-projection on to the camera of a rectangle that is placed on the road.
 
 STEP 5: Perform a Hough Transformation to find the start- and end-points of continuous lines in the image. Note that this works by mapping each point in the image space (x,y cartesian coordinates) onto a (sine) curve in the Hough space (r,\theta polar coordinates). Therefore, the point in Hough space where N sine curves intersect defines the line that connects the corresponding N points in cartesian space. 
@@ -45,8 +47,11 @@ This will result in two sets (one for each lanes) of 4-tuples, with each 4-tuple
 
 STEP 7: Draw the lines, using different colors. 
 
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/draw_lines.jpg)
+
 STEP 8: Overlay the lines with the original image. 
 
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/final.jpg)
 
 
 ![alt text][image1]
