@@ -1,6 +1,6 @@
 # **Finding highway lane lines – base and challenging case** 
 
-## Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
+## 1. Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
 
 ---
 
@@ -54,9 +54,6 @@ STEP 8: Overlay the lines with the original image.
 ![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/final.jpg)
 
 
-![alt text][image1]
-
-
 ### 2. Identify potential shortcomings with your current pipeline
 
 
@@ -70,3 +67,10 @@ Another shortcoming could be ...
 A possible improvement would be to ...
 
 Another potential improvement could be to ...
+
+
+## 1. Challenge: finding lane lines on a curved highway, with shadows and variable-surfaces with (some) unclear markings
+
+
+
+
