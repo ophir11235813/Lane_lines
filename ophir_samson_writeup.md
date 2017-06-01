@@ -4,19 +4,11 @@
 
 ---
 
-Goal: Identify and highlight the left- and right-lane markings of a highway, given a raw video feed.
+Goal of this case: Identify and highlight the left- and right-lane markings of a highway, given a raw video feed.
 
-Introduction to method: We'll first show how to do this for a single image. The video is then a stream of many independent images, each of which are processed using the same method. 
-
-Method:
-
-STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
-
-STEP 2: 
-
-
-* Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
+Specifically: 
+* Build a pipeline that receives a still image of a highway and finds the lane lines
+* Reflect on the process of building this code.
 
 
 [//]: # (Image References)
@@ -29,11 +21,33 @@ STEP 2:
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+Introduction to method: We'll first show how to do this for a single image. The video is then a stream of many independent images, each of which are processed using the same method. 
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
+STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
 
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+[image1]: ./grayscale.jpg "Grayscale"
+
+STEP 2: Apply Gaussian smoothing to the gray scale image. This applies a Gaussian blur over a filter, thus reducing noise and unneccessary detail in the image. 
+
+STEP 3: Run a Canny Edge Detection algorithm over the smoothed image. This algorithm looks for steep changes (i.e. high value derivatives) in color functions, thus highlighting where the edges of objects are. 
+
+STEP 4: Define a "region of interest". We are interested only in the region in front (and a little to the sides) of the car, rather than in the entire image. Hence define a trapezoid within which we subsequently detect the lanes. Note that this trapezoid can be thought of as a 2D-projection on to the camera of a rectangle that is placed on the road.
+
+STEP 5: Perform a Hough Transformation to find the start- and end-points of continuous lines in the image. Note that this works by mapping each point in the image space (x,y cartesian coordinates) onto a (sine) curve in the Hough space (r,\theta polar coordinates). Therefore, the point in Hough space where N sine curves intersect defines the line that connects the corresponding N points in cartesian space. 
+
+STEP 6: Find lane markings. To do this, measure the gradient of the lines that connect each set of 4 points (from the Hough Transformation in step 6). Then, the left lane markings can be identified as being the points that have an associated NEGATIVE gradient, while the right lane markings will have POSITIVE gradients. Note that the unconventional sign change is because the y-values, or height, of left lanes decreases as the x-values increases. 
+
+Next, separate the lines in two sets (left- and right-lanes sets). From each set, find the (x,y) coordinates of both the closest and furthest point to/from the car, and draw a line between those points using the straight line equation y = mx + c. 
+
+Finally, extrapolate the line to the bottom of the image, and to the top of the region of interest using the same straight line equation. 
+
+This will result in two sets (one for each lanes) of 4-tuples, with each 4-tuple defining the start- and end-points of the extrapolated lines.
+
+STEP 7: Draw the lines, using different colors. 
+
+STEP 8: Overlay the lines with the original image. 
+
+
 
 ![alt text][image1]
 
