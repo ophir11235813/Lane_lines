@@ -25,7 +25,7 @@ Introduction to method: We'll first show how to do this for a single image. The 
 
 STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
 
-![Settings Window](https://raw.github.com/ophir11235813/Lane_lines/edit/master/grayscale.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/grayscale.jpg)
 
 STEP 2: Apply Gaussian smoothing to the gray scale image. This applies a Gaussian blur over a filter, thus reducing noise and unneccessary detail in the image. 
 
