@@ -2,13 +2,19 @@
 
 ## Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
 ---
 
-**Finding Lane Lines on the Road**
+Goal: Identify and highlight the left- and right-lane markings of a highway, given a raw video feed.
 
-The goals / steps of this project are the following:
+Introduction to method: We'll first show how to do this for a single image. The video is then a stream of many independent images, each of which are processed using the same method. 
+
+Method:
+
+STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
+
+STEP 2: 
+
+
 * Make a pipeline that finds lane lines on the road
 * Reflect on your work in a written report
 
