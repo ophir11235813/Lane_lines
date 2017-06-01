@@ -47,7 +47,7 @@ This will result in two sets (one for each lanes) of 4-tuples, with each 4-tuple
 
 STEP 7: Draw the lines, using different colors. 
 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/draw_lines.jpg =128*72)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/draw_lines.jpg)
 
 STEP 8: Overlay the lines with the original image. 
 
