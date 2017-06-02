@@ -8,19 +8,14 @@ Specifically:
 * Build a pipeline that receives a still image of a highway and finds the lane lines
 * Reflect on the process of building this code.
 
+Cases:
+1) Base case: straight, sunny, shadow-less, constant surface-color road with clear markings and no nearby cars
+2) Challenging case: curved road, with shadows, variable surface-colors, nearby cars, and unclear markings
+
+
 
 ## 1. Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
 
-
-[//]: # (Image References)
-
-[image1]: ./examples/grayscale.jpg "Grayscale"
-
----
-
-### Reflection
-
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
 Introduction to method: We'll first show how to do this for a single image. The video is then a stream of many independent images, each of which are processed using the same method. 
 
@@ -38,7 +33,7 @@ STEP 4: Define a "region of interest". We are interested only in the region in f
 
 STEP 5: Perform a Hough Transformation to find the start- and end-points of continuous lines in the image. Note that this works by mapping each point in the image space (x,y cartesian coordinates) onto a (sine) curve in the Hough space (r,\theta polar coordinates). Therefore, the point in Hough space where N sine curves intersect defines the line that connects the corresponding N points in cartesian space. 
 
-STEP 6: Find lane markings. To do this, measure the gradient of the lines that connect each set of 4 points (from the Hough Transformation in step 6). Then, the left lane markings can be identified as being the points that have an associated NEGATIVE gradient, while the right lane markings will have POSITIVE gradients. Note that the unconventional sign change is because the y-values, or height, of left lanes decreases as the x-values increases. 
+STEP 6: Find lane markings (*This is where I changed the draw_lines function*): To do this, measure the gradient of the lines that connect each set of 4 points (from the Hough Transformation in step 6). Then, the left lane markings can be identified as being the points that have an associated NEGATIVE gradient, while the right lane markings will have POSITIVE gradients. Note that the unconventional sign change is because the y-values, or height, of left lanes decreases as the x-values increases. 
 
 Next, separate the lines in two sets (left- and right-lanes sets). From each set, find the (x,y) coordinates of both the closest and furthest point to/from the car, and draw a line between those points using the straight line equation y = mx + c. 
 
@@ -55,12 +50,15 @@ STEP 8: Overlay the lines with the original image.
 ![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/final.jpg)
 
 
-### 2. Identify potential shortcomings with your current pipeline
+### 2. Potential shortcomings with pipeline
 
+There are three key shortcomings to the above proceedure / code. 
 
-One potential shortcoming would be what would happen when ... 
+1. This code will only work on *straight lines*. This is because the Hough Transformation can only detect straight lines. Hence if the car were to turn, the lines would not bend with the road. 
 
-Another shortcoming could be ...
+2. This also won't work when there are shadows on the road. Shadows create a change in image color, and hence Canny edge detection will "detect" a line along the shadow line. 
+
+3. If another car comes near to the lane marking, it risks entering also into the (trapezoidal) region of interest. In that case, Canny edge detection will identify the car's boundaries. The points on the car's boundaries may "pollute" the subsequent code and the best fit (lane) line may be forced to incorrectly pass through the car's boundary. 
 
 
 ### 3. Suggest possible improvements to your pipeline
