@@ -82,13 +82,15 @@ A few prepapatory steps before we begin the main pipeline. Firstly, we must corr
 
 This is important because for this exercise, we will need to transform the raw image to bring the furthest points from the car "closer" before processing. Any camera distortions here will be magnified by this transformation, and so we need to correct the distortions up front. 
 
-Pipeline:
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/calibration2.jpg)
+
+#### Pipeline:
 
 STEP 1: Undistort the raw image, using the distortion coefficients and the camera matrix (as explained above).
 
 STEP 2: Transform the (undistorted), so that we magnify the furthest points from the car. 
 
-STEP 3: Run the code to find the (x,y) coordinates of the left and right lanes in this transformed image. 
+STEP 3: Run the code to find the (x,y) coordinates of the left and right lanes in this transformed image. \n
 -- STEP 3a: Map the (color) image to HLS space, and apply the first set of white and yellow filters to identify the left (yellow) and right (white) lines. This will result in a black image with two identified lines in HLS space.
 -- STEP 3b: Convert to grayscale and constrain to a region of interest (trapezion, as in the straight-line example)
 -- STEP 3c: Send to code that finds (x,y) coordinates of the lines in a grayscale image. *See below for further details of how this function works.*
@@ -105,7 +107,9 @@ STEP 7: Transform the shaded area back to real space, using the opposite process
 
 STEP 8: Overlay the lines and shaded area with the original image
 
+#### Further details of STEP 3c: How to find (x,y) coordinates of white points in a grayscale image
 
+This part of code accepts a grayscale image with some non-black pixels, representing the left and the right lines in the transformed space. It then finds  the (x,y) coordinates those pixels.
 
----
-
+To do this, we separate the image into two halves (left half for the left-lane, and right half for the right lane). We then further "slice" each half into ~100 horizontal rows (y-coordinates). For each slice, we find the column (x-coordinate) with the highest average value: The more "white" there is, the more likely it is that the column (within that slice) is where the lane line is. 
+    
