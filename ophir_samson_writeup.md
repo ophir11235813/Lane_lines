@@ -56,16 +56,20 @@ There are three key shortcomings to the above proceedure / code.
 
 1. This code will only work on *straight lines*. This is because the Hough Transformation can only detect straight lines. Hence if the car were to turn, the lines would not bend with the road. 
 
-2. This also won't work when there are shadows on the road. Shadows create a change in image color, and hence Canny edge detection will "detect" a line along the shadow line. 
+2. This also won't work when there are shadows on the road, or when there is a (quickly) changing color of road surface. Shadows create a change in image color, and hence Canny edge detection will "detect" a line along the shadow line. 
 
 3. If another car comes near to the lane marking, it risks entering also into the (trapezoidal) region of interest. In that case, Canny edge detection will identify the car's boundaries. The points on the car's boundaries may "pollute" the subsequent code and the best fit (lane) line may be forced to incorrectly pass through the car's boundary. 
 
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
+The following could overcome the above shortcomings:
 
-Another potential improvement could be to ...
+1. Detect curved lines: this is the subject of the challenge, and I will highlight the method below. 
+
+2. To handle shadows, we can convert to HLS (or HSV) color space and then apply filters to identify the lane lines even when they are under shadow. Similarly, this is part of the challenge, and I highlight the method below and within the corresponding code. 
+
+3. There are two methods to handle nearby cars: A) tighten the trapezoid region of interest's shape (i.e. reduce its width) to reduce the likelihood of this happening. However, this is risky as if the trapeiod is *too* tight, then it may miss the lanes altogether. B) One can convert the image to HLS (or HSV) space and apply the appropriate filter to isolate the white/yellow lines. This is what I do in the challenge below. Note that this can be difficult to do if the color of the car is the same as the color of the lane!
 
 
 ## 2. Challenge: finding lane lines on a curved highway, with shadows and variable-surfaces with (some) unclear markings
