@@ -16,8 +16,10 @@ Cases:
 
 ## 1. Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
 
+### Pipeline:
 
-Introduction to method: We'll first show how to do this for a single image. The video is then a stream of many independent images, each of which are processed using the same method. 
+#### Introduction to method: 
+We'll first show how to do this for a single image. The video is then a stream of many independent images, each of which are processed using the same method. 
 
 STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
 
@@ -72,13 +74,11 @@ The following could overcome the above shortcomings:
 3. There are two methods to handle nearby cars: A) tighten the trapezoid region of interest's shape (i.e. reduce its width) to reduce the likelihood of this happening. However, this is risky as if the trapeiod is *too* tight, then it may miss the lanes altogether. B) One can convert the image to HLS (or HSV) space and apply the appropriate filter to isolate the white/yellow lines. This is what I do in the challenge below. Note that this can be difficult to do if the color of the car is the same as the color of the lane!
 
 
-## 2. Challenge: finding lane lines on a curved highway, with shadows and variable-surfaces with (some) unclear markings
+## 2. Challenge: finding lane lines on a curved highway with shadows, variable-surfaces, unclear markings, and nearby cars
 
-### Reflection
+### Pipeline
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
-
-Preparation: Camera distortion
+#### Preparation: Camera distortion
 
 A few prepapatory steps before we begin the main pipeline. Firstly, we must correct the camera distortion that occurs as a result of the curved. We do this by considering the camera's image of a shape with known geometry (chessboards at different angles), and comparing various points in real space (corners of the chessboard) versus where the camera images them to be. This gives us a "camera matrix" and a list of "distortion coefficients" which are specific to the camera that takes in the raw images (i.e. the camera at the front of the car). 
 
@@ -86,7 +86,7 @@ This is important because for this exercise, we will need to transform the raw i
 
 ![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/calibration2.jpg)
 
-#### Pipeline:
+#### Pipeline steps:
 
 STEP 1: Undistort the raw image, using the distortion coefficients and the camera matrix (as explained above).
 
@@ -118,3 +118,21 @@ This part of code accepts a grayscale image with some non-black pixels, represen
 
 To do this, we separate the image into two halves (left half for the left-lane, and right half for the right lane). We then further "slice" each half into ~100 horizontal rows (y-coordinates). For each slice, we find the column (x-coordinate) with the highest average value: The more "white" there is, the more likely it is that the column (within that slice) is where the lane line is. 
     
+### 2. Potential shortcomings with pipeline
+
+There are three key shortcomings to the above proceedure / code. 
+
+1. The color filters worked on the *specific challenge video that was supplied*. The same color filters may NOT work on other roads where the shade of yellow is different, or where there are significantly worn-down white markings (e.g. from tyre marks).
+
+2. The quadratic polynomial that attempts to "fit" the lane points, is usually centered around the middle of the image. This means that the error at the edges of the image (the furthest from / nearest points to the car) are likely to be large. 
+
+### 3. Suggest possible improvements to your pipeline
+
+To solve the "specific color filter" problem (*see first point above*): Use images/videos of other roads (e.g. within the same geography) to get a sense of the ranges of yellows and whites that the code can expect. Then, get a color filter which will work on as many of those roads as possible. <br /> Alternatively, I could make N different color filters and, after running each one independently, build another function that "counts" how many points I am able to pick up with that filter – if the count is too low, then I could try the next filter. 
+
+## Final thoughts
+
+This was a very useful challenge, as it taught me a few lessons:
+
+1. Different instances can makes lane detection very difficult in realistic settings (e.g. curved lines, worn down markings, other cars, shadows, etc.). I assume non-horizontal roads may complicate things further.
+2. Constructing color filters efficiently/quickly probably takes significant intuition, and is very contextual to the images in question. At some point, there are diminishing marginal returns on tweaks to the filtering parameters!
