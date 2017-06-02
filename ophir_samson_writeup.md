@@ -132,7 +132,7 @@ To solve the "specific color filter" problem (*see first point above*): Use imag
 
 ## Final thoughts
 
-This was a very useful and enjoyable challenge! It taught me a few lessons:
+This was a very useful and enjoyable challenge! A few key take aways are:
 
 1. Different instances can makes lane detection very difficult in realistic settings (e.g. curved lines, worn down markings, other cars, shadows, etc.). I assume non-horizontal roads may complicate things further.
 2. Constructing color filters efficiently/quickly probably takes significant intuition, and is very contextual to the images in question. At some point, there are diminishing marginal returns on tweaks to the filtering parameters!
