@@ -17,5 +17,8 @@ There are two IPython notebooks, one for each case:
 
 Each are fully annoted to describe the methods used within.
 
+### Output videos
+
+Output videos (the results of both cases) are saved in the repository above. 
 
 ![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/final_curved.jpg)
