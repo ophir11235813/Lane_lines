@@ -23,13 +23,13 @@ We'll first show how to do this for a single image. The video is then a stream o
 
 STEP 1: Read in image (a three color channel image), and convert to gray scale (single channel). 
 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/grayscale.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/grayscale.jpg)
 
 STEP 2: Apply Gaussian smoothing to the gray scale image. This applies a Gaussian blur over a filter, thus reducing noise and unneccessary detail in the image. 
 
 STEP 3: Run a Canny Edge Detection algorithm over the smoothed image. This algorithm looks for steep changes (i.e. high value derivatives) in color functions, thus highlighting where the edges of objects are. 
 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/canny_edge.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/canny_edge.jpg)
 
 STEP 4: Define a "region of interest". We are interested only in the region in front (and a little to the sides) of the car, rather than in the entire image. Hence define a trapezoid within which we subsequently detect the lanes. Note that this trapezoid can be thought of as a 2D-projection on to the camera of a rectangle that is placed on the road.
 
@@ -49,7 +49,7 @@ STEP 7: Draw the lines, using different colors.
 
 STEP 8: Overlay the lines with the original image. 
 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/final.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/final.jpg)
 
 
 ### 2. Potential shortcomings with pipeline
@@ -84,20 +84,20 @@ A few prepapatory steps before we begin the main pipeline. Firstly, we must corr
 
 This is important because for this exercise, we will need to transform the raw image to bring the furthest points from the car "closer" before processing. Any camera distortions here will be magnified by this transformation, and so we need to correct the distortions up front. 
 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/calibration2.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/calibration2.jpg)
 
 #### Pipeline steps:
 
 STEP 1: Undistort the raw image, using the distortion coefficients and the camera matrix (as explained above).
 
 STEP 2: Transform the (undistorted), so that we magnify the furthest points from the car. 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/trans.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/trans.jpg)
 
 STEP 3: Run the code to find the (x,y) coordinates of the left and right lanes in this transformed image. <br /> 
 -- STEP 3a: Map the (color) image to HLS space, and apply the first set of white and yellow filters to identify the left (yellow) and right (white) lines. This will result in a black image with two identified lines in HLS space.<br /> 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/converted.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/converted.jpg)
 -- STEP 3b: Convert to grayscale and constrain to a region of interest (trapezion, as in the straight-line example)<br /> 
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/trans_ROI.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/trans_ROI.jpg)
 -- STEP 3c: Send to code that finds (x,y) coordinates of the lines in a grayscale image. *See below for further details of how this function works.*
 
 STEP 4: Check whether enough points have been found in left and right lanes. If not, then run a second set of white and yellow filters. 
@@ -111,7 +111,7 @@ STEP 6: Highlight the lane lines and fill the area in between with green shade. 
 STEP 7: Transform the shaded area back to real space, using the opposite process to STEP 2. 
 
 STEP 8: Overlay the lines and shaded area with the original image
-![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/final_curved.jpg)
+![ScreenShot](https://raw.github.com/ophir11235813/Lane_lines/master/images/final_curved.jpg)
 #### Further details of STEP 3c: How to find (x,y) coordinates of white points in a grayscale image
 
 This part of code accepts a grayscale image with some non-black pixels, representing the left and the right lines in the transformed space. It then finds  the (x,y) coordinates those pixels.
