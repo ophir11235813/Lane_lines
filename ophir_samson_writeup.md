@@ -1,14 +1,15 @@
 # **Finding highway lane lines – base and challenging case** 
 
-## 1. Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
-
 ---
 
-Goal of this case: Identify and highlight the left- and right-lane markings of a highway, given a raw video feed.
+In both cases, the goal is to identify and highlight the left- and right-lane markings of a highway, given a raw video feed.
 
 Specifically: 
 * Build a pipeline that receives a still image of a highway and finds the lane lines
 * Reflect on the process of building this code.
+
+
+## 1. Base case: finding lane lines on a straight, sunny, shadow-less, constant-surface road with clear markings
 
 
 [//]: # (Image References)
@@ -69,8 +70,42 @@ A possible improvement would be to ...
 Another potential improvement could be to ...
 
 
-## 1. Challenge: finding lane lines on a curved highway, with shadows and variable-surfaces with (some) unclear markings
+## 2. Challenge: finding lane lines on a curved highway, with shadows and variable-surfaces with (some) unclear markings
+
+### Reflection
+
+### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+
+Preparation: Camera distortion
+
+A few prepapatory steps before we begin the main pipeline. Firstly, we must correct the camera distortion that occurs as a result of the curved. We do this by considering the camera's image of a shape with known geometry (chessboards at different angles), and comparing various points in real space (corners of the chessboard) versus where the camera images them to be. This gives us a "camera matrix" and a list of "distortion coefficients" which are specific to the camera that takes in the raw images (i.e. the camera at the front of the car). 
+
+This is important because for this exercise, we will need to transform the raw image to bring the furthest points from the car "closer" before processing. Any camera distortions here will be magnified by this transformation, and so we need to correct the distortions up front. 
+
+Pipeline:
+
+STEP 1: Undistort the raw image, using the distortion coefficients and the camera matrix (as explained above).
+
+STEP 2: Transform the (undistorted), so that we magnify the furthest points from the car. 
+
+STEP 3: Run the code to find the (x,y) coordinates of the left and right lanes in this transformed image. 
+-- STEP 3a: Map the (color) image to HLS space, and apply the first set of white and yellow filters to identify the left (yellow) and right (white) lines. This will result in a black image with two identified lines in HLS space.
+-- STEP 3b: Convert to grayscale and constrain to a region of interest (trapezion, as in the straight-line example)
+-- STEP 3c: Send to code that finds (x,y) coordinates of the lines in a grayscale image. *See below for further details of how this function works.*
+
+STEP 4: Check whether enough points have been found in left and right lanes. If not, then run a second set of white and yellow filters. 
+
+At this point, we will have the (x,y) coordinates of both lanes. 
+
+STEP 5: Apply a quadratic polynominal fit to the points. This will give the (shallow) parabolas for the left and right lines. Extrapolate the parabolas to the lower and upper ends of the region of interest. 
+
+STEP 6: Highlight the lane lines and fill the area in between with green shade. This area will still be in the transformed space. 
+
+STEP 7: Transform the shaded area back to real space, using the opposite process to STEP 2. 
+
+STEP 8: Overlay the lines and shaded area with the original image
 
 
 
+---
 
